@@ -29,28 +29,49 @@ impl fmt::Display for Card {
     }
 }
 
+pub fn create_card(index:i16, string:String, suit:String) -> Card {
+    Card{
+        index: index,
+        string: string,
+        suit: suit
+    }
+}
+
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Deck {
-    pub cards: Vec<Card>
+    cards: Vec<Card>
 }
 
 impl Deck {
+    pub fn create_52(mut self) -> Deck {
+        let indexes = vec![1,2,3,4,5,6,7,8,9,10,11,12,13];
+        let facevalues = vec!["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        let suits:Vec<String> = vec!["hearts".to_owned(), "spades".to_owned(), "diamonds".to_owned(), "clubs".to_owned()];
+        for suit in &suits {
+            for i in 0..indexes.len() {
+                let card = create_card(indexes[i], facevalues[i].to_owned(), suit.to_string());
+                self = self.add_card(card);
+            }
+        }
+        self
+    }
+
     pub fn shuffle(mut self) -> Deck {
         self.cards.shuffle(&mut thread_rng());
         self
     }
 
-    pub fn take_one(mut self) -> Card {
+    pub fn take_card(mut self) -> (Card, Deck) {
         // probably need to return deck here also
-        self.cards.pop().unwrap()
+        (self.cards.pop().unwrap(), self)
     }
 
     pub fn get_cards(&self) -> Vec<Card> {
         self.cards.clone()
     }
 
-    pub fn add_cards(mut self, card: Card) -> Deck {
+    pub fn add_card(mut self, card: Card) -> Deck {
         self.cards.push(card);
         self
     }
@@ -66,14 +87,6 @@ impl fmt::Display for Deck {
             write!(f, "{}", card.get_facevalue())?;
         }
         write!(f,"")
-    }
-}
-
-pub fn create_card(index:i16, string:String, suit:String) -> Card {
-    Card{
-        index: index,
-        string: string,
-        suit: suit
     }
 }
 
