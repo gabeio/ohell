@@ -27,7 +27,8 @@ impl Ohhell {
             let (card, deck) = deck.take_card();
             self.deck = deck;
             let mut _p = player;
-            _p = &mut _p.add_card(card);
+            let mut _p = (&mut _p).add_card(card);
+            // player = _p;
         }
         self.players = players;
         self
@@ -69,7 +70,7 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn add_card(mut self, card: cards::Card) -> Player {
+    pub fn add_card(&mut self, card: cards::Card) -> &mut Player {
         self.cards.push(card);
         self
     }
