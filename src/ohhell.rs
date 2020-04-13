@@ -26,9 +26,7 @@ impl Ohhell {
             let deck = self.deck;
             let (card, deck) = deck.take_card();
             self.deck = deck;
-            let mut _p = player;
-            let mut _p = (&mut _p).add_card(card);
-            // player = _p;
+            player.add_card(card);
         }
         self.players = players;
         self
