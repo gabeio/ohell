@@ -57,7 +57,7 @@ pub fn create_hand() -> Hand {
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Player {
-    name: String,
+    name: &'static str,
     cards: Vec<cards::Card>,
 }
 
@@ -73,7 +73,7 @@ impl Player {
     }
 }
 
-pub fn create_player(name: String) -> Player {
+pub fn create_player(name: &'static str) -> Player {
     Player{
         name: name,
         cards: vec!(),
