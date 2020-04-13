@@ -21,11 +21,15 @@ impl Ohhell {
     }
 
     fn deal(mut self) -> Ohhell {
-        for player in &self.players {
-            let (card, deck) = self.deck.expect("deal.deck.expect").take_card();
-            self.deck = Some(deck);
-            // player.add_card(card);
+        let mut players = self.players;
+        for player in &mut players {
+            let deck = self.deck;
+            let (card, deck) = deck.take_card();
+            self.deck = deck;
+            let mut _p = player;
+            _p = &mut _p.add_card(card);
         }
+        self.players = players;
         self
     }
 }
