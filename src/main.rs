@@ -4,7 +4,7 @@ use cursive::views::{TextView};
 mod ohhell;
 
 fn main() {
-    let mut ohhell: ohhell::Ohhell = ohhell::create_ohhell();
+    let ohhell: ohhell::Ohhell = ohhell::create_ohhell();
     ohhell.launch();
 
     let mut siv = Cursive::default();
