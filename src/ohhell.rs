@@ -3,18 +3,21 @@
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Ohhell {
-    deck: Option<cards::Deck>,
+    deck: cards::Deck,
     hands: Vec<Hand>,
     players: Vec<Player>,
 }
 
 impl Ohhell {
     pub fn launch(mut self) {
-        self.deck = Some(cards::create_deck(vec!()));
-        self.deck = Some(self.deck.expect("expect A").create_52());
-        self.deck = Some(self.deck.expect("expect B").shuffle());
-        println!("{:?}", self.deck.expect("expect C").get_cards());
-        // self.deck = Some(self.deck.expect(""))
+        let deck = cards::create_deck(vec!());
+        let deck = deck.create_52();
+        let deck = deck.shuffle();
+        let ohhell = self.deal();
+        self = ohhell;
+        println!("{:?}", deck.get_cards());
+        self.deck = deck;
+
     }
 
     fn deal(mut self) -> Ohhell {
@@ -29,7 +32,7 @@ impl Ohhell {
 
 pub fn create_ohhell() -> Ohhell {
     Ohhell{
-        deck: None,
+        deck: cards::create_deck(vec!()),
         hands: vec!(),
         players: vec!(),
     }
