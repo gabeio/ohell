@@ -6,16 +6,26 @@ use rand::seq::SliceRandom;
 
 
 #[derive(Debug)]
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct Card {
     index: i16,
-    string: String,
-    suit: String,
+    facevalue: &'static str,
+    suit: i16,
 }
 
 impl Card {
-    pub fn get_facevalue(&self) -> &String {
-        &self.string
+    pub fn get_facevalue(&self) -> &str {
+        &self.facevalue
+    }
+
+    pub fn get_suit(&self) -> String {
+        match self.suit {
+            1 => "hearts".to_owned(),
+            2 => "diamonds".to_owned(),
+            3 => "clubs".to_owned(),
+            4 => "spades".to_owned(),
+            _ => panic!("card has invalid suit"),
+        }
     }
 
     pub fn get_index(&self) -> i16 {
@@ -25,14 +35,14 @@ impl Card {
 
 impl fmt::Display for Card {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.string)
+        write!(f, "{}", self.facevalue)
     }
 }
 
-pub fn create_card(index:i16, string:String, suit:String) -> Card {
+pub fn create_card(index:i16, string:&'static str, suit: i16) -> Card {
     Card{
         index: index,
-        string: string,
+        facevalue: string,
         suit: suit
     }
 }
@@ -47,10 +57,10 @@ impl Deck {
     pub fn create_52(mut self) -> Deck {
         let indexes = vec![1,2,3,4,5,6,7,8,9,10,11,12,13];
         let facevalues = vec!["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-        let suits:Vec<String> = vec!["hearts".to_owned(), "spades".to_owned(), "diamonds".to_owned(), "clubs".to_owned()];
+        let suits:Vec<i16> = vec![1,2,3,4];
         for suit in &suits {
             for i in 0..indexes.len() {
-                let card = create_card(indexes[i], facevalues[i].to_owned(), suit.to_string());
+                let card = create_card(indexes[i], facevalues[i], *suit);
                 self = self.add_card(card);
             }
         }
