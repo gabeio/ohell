@@ -20,6 +20,15 @@ impl Ohhell {
 
     }
 
+    // maybe change count to i16 later
+    pub fn set_players(mut self, count: usize) -> Ohhell {
+        for i in 0..count {
+            let name: String = format!("Player {}", i);
+            self.players.push(create_player(name));
+        }
+        self
+    }
+
     fn deal(mut self) -> Ohhell {
         let mut players = self.players;
         for player in &mut players {
@@ -63,7 +72,7 @@ pub fn create_hand() -> Hand {
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Player {
-    name: &'static str,
+    name: String,
     cards: Vec<cards::Card>,
 }
 
@@ -79,7 +88,7 @@ impl Player {
     }
 }
 
-pub fn create_player(name: &'static str) -> Player {
+pub fn create_player(name: String) -> Player {
     Player{
         name: name,
         cards: vec!(),

@@ -5,6 +5,7 @@ mod ohhell;
 
 fn main() {
     let ohhell: ohhell::Ohhell = ohhell::create_ohhell();
+    let ohhell = ohhell.set_players(4usize);
     ohhell.launch();
 
     let mut siv = Cursive::default();
