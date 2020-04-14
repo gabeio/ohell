@@ -13,6 +13,7 @@ impl Ohhell {
         let deck = cards::create_deck(vec!());
         let deck = deck.create_52();
         let deck = deck.shuffle();
+        self.deck = deck;
         let ohhell = self.deal();
         self = ohhell;
         println!("{:?}", deck.get_cards());
