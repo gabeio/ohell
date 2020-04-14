@@ -72,9 +72,10 @@ impl Deck {
         self
     }
 
-    pub fn take_card(mut self) -> (Card, Deck) {
+    pub fn take_card(mut self) -> (Option<Card>, Deck) {
         // probably need to return deck here also
-        (self.cards.pop().unwrap(), self)
+        let card = self.cards.pop();
+        (card, self)
     }
 
     pub fn get_cards(&self) -> Vec<Card> {
