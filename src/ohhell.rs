@@ -29,6 +29,16 @@ impl Ohhell {
         self
     }
 
+    pub fn set_hands(mut self, count: usize) -> Ohhell {
+        for i in 0..count {
+            let hand = Hand{
+                winner: None
+            };
+            self.hands.push(hand);
+        }
+        self
+    }
+
     fn deal(mut self) -> Ohhell {
         let mut players = self.players;
         for player in &mut players {
