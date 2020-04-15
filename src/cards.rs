@@ -4,7 +4,7 @@ use std::fmt;
 use rand::thread_rng;
 use rand::seq::SliceRandom;
 
-
+#[derive(Hash)]
 #[derive(Debug)]
 #[derive(Clone, Copy)]
 pub struct Card {
