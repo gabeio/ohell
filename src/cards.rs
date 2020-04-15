@@ -14,6 +14,14 @@ pub struct Card {
 }
 
 impl Card {
+    pub fn new(index:i16, string:&'static str, suit: i16) -> Card {
+        Card{
+            index: index,
+            facevalue: string,
+            suit: suit
+        }
+    }
+
     pub fn get_facevalue(&self) -> &str {
         &self.facevalue
     }
@@ -39,14 +47,6 @@ impl fmt::Display for Card {
     }
 }
 
-pub fn create_card(index:i16, string:&'static str, suit: i16) -> Card {
-    Card{
-        index: index,
-        facevalue: string,
-        suit: suit
-    }
-}
-
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Deck {
@@ -54,13 +54,19 @@ pub struct Deck {
 }
 
 impl Deck {
+    pub fn new(cards: Vec<Card>) -> Deck {
+        Deck{
+            cards: cards,
+        }
+    }
+
     pub fn create_52(mut self) -> Deck {
         let indexes = vec![1,2,3,4,5,6,7,8,9,10,11,12,13];
         let facevalues = vec!["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
         let suits:Vec<i16> = vec![1,2,3,4];
         for suit in &suits {
             for i in 0..indexes.len() {
-                let card = create_card(indexes[i], facevalues[i], *suit);
+                let card = Card::new(indexes[i], facevalues[i], *suit);
                 self = self.add_card(card);
             }
         }
@@ -98,11 +104,5 @@ impl fmt::Display for Deck {
             write!(f, "{}", card.get_facevalue())?;
         }
         write!(f,"")
-    }
-}
-
-pub fn create_deck(cards: Vec<Card>) -> Deck {
-    Deck{
-        cards: cards,
     }
 }

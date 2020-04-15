@@ -6,11 +6,21 @@ pub struct Ohhell {
     deck: cards::Deck,
     hands: Vec<Hand>,
     players: Vec<Player>,
+    pile: cards::Deck,
 }
 
 impl Ohhell {
-    pub fn launch(mut self) {
-        let deck = cards::create_deck(vec!());
+    pub fn new() -> Ohhell {
+        Ohhell{
+            deck: cards::Deck::new(vec!()),
+            hands: vec!(),
+            players: vec!(),
+            pile: cards::Deck::new(vec!()),
+        }
+    }
+
+    pub fn start(mut self) -> Ohhell {
+        let deck = cards::Deck::new(vec!());
         let deck = deck.create_52();
         let deck = deck.shuffle();
         self.deck = deck;
@@ -25,13 +35,13 @@ impl Ohhell {
     pub fn set_players(mut self, count: usize) -> Ohhell {
         for i in 0..count {
             let name: String = format!("Player {}", i);
-            self.players.push(create_player(name));
+            self.players.push(Player::new(name));
         }
         self
     }
 
     pub fn set_hands(mut self, count: usize) -> Ohhell {
-        for i in 0..count {
+        for _ in 0..count {
             let hand = Hand{
                 winner: None
             };
@@ -72,6 +82,12 @@ pub struct Hand {
 }
 
 impl Hand {
+    pub fn new() -> Hand {
+        Hand{
+            winner: None
+        }
+    }
+
     pub fn set_winner(mut self, player: Player) -> Hand {
         self.winner = Some(player);
         self
@@ -87,11 +103,20 @@ pub fn create_hand() -> Hand {
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Player {
+    uuid: Uuid,
     name: String,
     cards: Vec<cards::Card>,
 }
 
 impl Player {
+    pub fn new(name: String) -> Player {
+        Player{
+            uuid: Uuid::new_v4(),
+            name: name,
+            cards: vec!(),
+        }
+    }
+
     pub fn add_card(&mut self, card: cards::Card) -> &mut Player {
         self.cards.push(card);
         self
