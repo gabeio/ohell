@@ -2,9 +2,10 @@ use cursive::Cursive;
 use cursive::views::{TextView};
 
 mod rooms;
+mod wsserver;
 
 fn main() {
-    let room = rooms::Room::new();
+    wsserver::run_websocket_server();
     room.start();
 
     let mut siv = Cursive::default();

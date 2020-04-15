@@ -7,4 +7,10 @@ edition = "2018"
 [dependencies]
 rand = "*"
 cursive = "*"
+tokio = { version = "0.2", features = ["macros"] }
+warp = "0.2"
 uuid = { version = "0.8", features = ["v4"] }
+futures = { version = "0.3", default-features = false, features = ["alloc"] }
+
+[dev-dependencies]
+pretty_env_logger = "0.4"
