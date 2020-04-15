@@ -152,7 +152,7 @@ impl Hand {
 pub struct Player {
     uuid: Uuid,
     name: String,
-    cards: Vec<cards::Card>,
+    cards: cards::Deck,
 }
 
 impl Player {
@@ -160,25 +160,24 @@ impl Player {
         Player{
             uuid: Uuid::new_v4(),
             name: name,
-            cards: vec!(),
+            cards: cards::Deck::new(vec!()),
         }
     }
 
-    pub fn add_card(&mut self, card: cards::Card) -> &mut Player {
-        self.cards.push(card);
+    pub fn add_card(mut self, card: cards::Card) -> Player {
+        self.cards = self.cards.add_card(card);
         self
     }
 
     pub fn take_a_card(mut self) -> (cards::Card, Player) {
-        (self.cards.pop().unwrap(), self)
+        let (card, deck) = self.cards.take_a_card();
+        self.cards = deck;
+        (card, self)
     }
 
     pub fn take_card(mut self, index: i8, suit: i8) -> (cards::Card, Player) {
-        let card = cards::Card::new(index, "", suit);
-        // let card = self.cards.remove_item(&card).expect("you don't have that card");
-        let pos = self.cards.iter().position(|x| *x == card).unwrap();
-        let card = Some(self.cards.remove(pos));
-        let card = card.expect("you don't have that card");
+        let (card, deck) = self.cards.take_card(index, suit);
+        self.cards = deck;
         (card, self)
     }
 }

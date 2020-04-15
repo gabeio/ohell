@@ -57,7 +57,7 @@ impl PartialEq for Card {
 
 impl Eq for Card {}
 
-#[derive(Debug, Clone)]
+#[derive(Hash, Debug, Clone)]
 pub struct Deck {
     cards: Vec<Card>
 }
@@ -87,9 +87,17 @@ impl Deck {
         self
     }
 
-    pub fn take_card(mut self) -> (Option<Card>, Deck) {
-        // probably need to return deck here also
-        let card = self.cards.pop();
+    pub fn take_a_card(mut self) -> (Card, Deck) {
+        (self.cards.pop().unwrap(), self)
+    }
+
+    pub fn take_card(mut self, index: i8, suit: i8) -> (Card, Deck) {
+        let card = Card::new(index, "", suit);
+        // apparently remove_item is unstable
+        // let card = self.cards.remove_item(&card).expect("you don't have that card");
+        let pos = self.cards.iter().position(|x| *x == card).unwrap();
+        let card = Some(self.cards.remove(pos));
+        let card = card.expect("you don't have that card");
         (card, self)
     }
 
