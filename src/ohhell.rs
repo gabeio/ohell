@@ -1,5 +1,9 @@
 #[path = "./cards.rs"] mod cards;
 
+use std::collections::HashMap;
+use std::cmp::{PartialEq, Eq};
+use uuid::Uuid;
+
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Ohhell {
@@ -67,13 +71,68 @@ impl Ohhell {
     }
 }
 
-pub fn create_ohhell() -> Ohhell {
-    Ohhell{
-        deck: cards::create_deck(vec!()),
-        hands: vec!(),
-        players: vec!(),
+#[derive(Debug)]
+#[derive(Clone)]
+pub struct Round {
+    hands: Vec<Hand>,
+    bets: HashMap<Trick, bool>
+}
+
+impl Round {
+    pub fn new() -> Round {
+        Round{
+            hands: vec!(),
+            bets: HashMap::new(),
+        }
+    }
+
+    pub fn add_hands(mut self, hands: usize) -> Round {
+        for _ in 0..hands {
+            self.hands.push(Hand::new());
+        }
+        self
+    }
+
+    pub fn set_winners(mut self, winners: Vec<Player>) -> Round {
+        let mut bets = self.bets;
+        for winner in winners.iter() {
+            for (trick, win) in bets.iter_mut() {
+                if trick.player == *winner {
+                    *win = true;
+                }
+            }
+        }
+        self.bets = bets;
+        self
     }
 }
+
+#[derive(Hash)]
+#[derive(Debug)]
+#[derive(Clone)]
+pub struct Trick {
+    uuid: Uuid,
+    player: Player,
+    tricks: i16,
+}
+
+impl Trick {
+    pub fn new(player: Player, bet: i16) -> Trick {
+        Trick{
+            uuid: Uuid::new_v4(),
+            player: player,
+            tricks: bet,
+        }
+    }
+}
+
+impl PartialEq for Trick {
+    fn eq(&self, other: &Self) -> bool {
+        self.uuid == other.uuid
+    }
+}
+
+impl Eq for Trick {}
 
 #[derive(Debug)]
 #[derive(Clone)]
@@ -94,12 +153,7 @@ impl Hand {
     }
 }
 
-pub fn create_hand() -> Hand {
-    Hand{
-        winner: None
-    }
-}
-
+#[derive(Hash)]
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Player {
@@ -128,9 +182,10 @@ impl Player {
     }
 }
 
-pub fn create_player(name: String) -> Player {
-    Player{
-        name: name,
-        cards: vec!(),
+impl PartialEq for Player {
+    fn eq(&self, other: &Self) -> bool {
+        self.uuid == other.uuid
     }
 }
+
+impl Eq for Player {}
