@@ -4,17 +4,15 @@ use std::fmt;
 use rand::thread_rng;
 use rand::seq::SliceRandom;
 
-#[derive(Hash)]
-#[derive(Debug)]
-#[derive(Clone, Copy)]
+#[derive(Hash, Debug, Clone, Copy)]
 pub struct Card {
-    index: i16,
+    index: i8,
     facevalue: &'static str,
-    suit: i16,
+    suit: i8,
 }
 
 impl Card {
-    pub fn new(index:i16, string:&'static str, suit: i16) -> Card {
+    pub fn new(index:i8, string:&'static str, suit: i8) -> Card {
         Card{
             index: index,
             facevalue: string,
@@ -36,8 +34,12 @@ impl Card {
         }
     }
 
-    pub fn get_index(&self) -> i16 {
+    pub fn get_index(&self) -> i8 {
         self.index
+    }
+
+    pub fn get_suit_int(&self) -> i8 {
+        self.suit
     }
 }
 
@@ -47,8 +49,15 @@ impl fmt::Display for Card {
     }
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
+impl PartialEq for Card {
+    fn eq(&self, other: &Self) -> bool {
+        self.index == other.index && self.suit == other.suit
+    }
+}
+
+impl Eq for Card {}
+
+#[derive(Debug, Clone)]
 pub struct Deck {
     cards: Vec<Card>
 }
@@ -63,7 +72,7 @@ impl Deck {
     pub fn create_52(mut self) -> Deck {
         let indexes = vec![1,2,3,4,5,6,7,8,9,10,11,12,13];
         let facevalues = vec!["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-        let suits:Vec<i16> = vec![1,2,3,4];
+        let suits = vec![1,2,3,4];
         for suit in &suits {
             for i in 0..indexes.len() {
                 let card = Card::new(indexes[i], facevalues[i], *suit);

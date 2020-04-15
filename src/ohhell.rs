@@ -4,32 +4,27 @@ use std::collections::HashMap;
 use std::cmp::{PartialEq, Eq};
 use uuid::Uuid;
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Ohhell {
-    deck: cards::Deck,
-    hands: Vec<Hand>,
+    rounds: Vec<Round>,
     players: Vec<Player>,
-    pile: cards::Deck,
 }
 
 impl Ohhell {
     pub fn new() -> Ohhell {
         Ohhell{
-            deck: cards::Deck::new(vec!()),
-            hands: vec!(),
+            rounds: vec!(),
             players: vec!(),
-            pile: cards::Deck::new(vec!()),
         }
     }
 
-    pub fn start(mut self) -> Ohhell {
-        let deck = cards::Deck::new(vec!());
-        let deck = deck.create_52();
-        let deck = deck.shuffle();
-        self.deck = deck;
-        let ohhell = self.deal();
-        self = ohhell;
+    pub fn start(self) -> Ohhell {
+        // let deck = cards::Deck::new(vec!());
+        // let deck = deck.create_52();
+        // let deck = deck.shuffle();
+        // self.deck = deck;
+        // let ohhell = self.deal();
+        // self = ohhell;
         self
     }
 
@@ -42,38 +37,35 @@ impl Ohhell {
         self
     }
 
-    pub fn set_hands(mut self, count: usize) -> Ohhell {
+    pub fn set_rounds(mut self, count: usize) -> Ohhell {
         for _ in 0..count {
-            let hand = Hand{
-                winner: None
-            };
-            self.hands.push(hand);
+            self.rounds.push(Round::new());
         }
         self
     }
 
-    fn deal(mut self) -> Ohhell {
-        let mut players = self.players;
-        for _ in 0..self.hands.len() {
-            for player in &mut players {
-                let deck = self.deck;
-                println!("{}", deck.len());
-                let (card, deck) = deck.take_card();
-                let card = card.expect("there was no card to take");
-                self.deck = deck;
-                player.add_card(card);
-            }
-        }
-        self.players = players;
-        self
-    }
+    // fn deal(mut self) -> Ohhell {
+    //     let mut players = self.players;
+    //     for _ in 0..self.rounds.len() {
+    //         for player in &mut players {
+    //             let deck = self.deck;
+    //             println!("{}", deck.len());
+    //             let (card, deck) = deck.take_card();
+    //             let card = card.expect("there was no card to take");
+    //             self.deck = deck;
+    //             player.add_card(card);
+    //         }
+    //     }
+    //     self.players = players;
+    //     self
+    // }
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Round {
     hands: Vec<Hand>,
-    bets: HashMap<Trick, bool>
+    bets: HashMap<Trick, bool>,
+    deck: cards::Deck,
 }
 
 impl Round {
@@ -81,6 +73,7 @@ impl Round {
         Round{
             hands: vec!(),
             bets: HashMap::new(),
+            deck: cards::Deck::new(vec!()),
         }
     }
 
@@ -105,9 +98,7 @@ impl Round {
     }
 }
 
-#[derive(Hash)]
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Hash, Debug, Clone)]
 pub struct Trick {
     uuid: Uuid,
     player: Player,
@@ -132,17 +123,23 @@ impl PartialEq for Trick {
 
 impl Eq for Trick {}
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Hand {
     winner: Option<Player>,
+    pile: cards::Deck,
 }
 
 impl Hand {
     pub fn new() -> Hand {
         Hand{
-            winner: None
+            winner: None,
+            pile: cards::Deck::new(vec!()),
         }
+    }
+
+    pub fn add_card(mut self, card: cards::Card) -> Hand {
+        self.pile = self.pile.add_card(card);
+        self
     }
 
     pub fn set_winner(mut self, player: Player) -> Hand {
@@ -151,9 +148,7 @@ impl Hand {
     }
 }
 
-#[derive(Hash)]
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Hash, Debug, Clone)]
 pub struct Player {
     uuid: Uuid,
     name: String,
@@ -174,9 +169,17 @@ impl Player {
         self
     }
 
-    pub fn take_card(mut self) -> (cards::Card, Player) {
-        // probably need to return deck here also
+    pub fn take_a_card(mut self) -> (cards::Card, Player) {
         (self.cards.pop().unwrap(), self)
+    }
+
+    pub fn take_card(mut self, index: i8, suit: i8) -> (cards::Card, Player) {
+        let card = cards::Card::new(index, "", suit);
+        // let card = self.cards.remove_item(&card).expect("you don't have that card");
+        let pos = self.cards.iter().position(|x| *x == card).unwrap();
+        let card = Some(self.cards.remove(pos));
+        let card = card.expect("you don't have that card");
+        (card, self)
     }
 }
 

@@ -2,8 +2,7 @@
 
 use uuid::Uuid;
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Room {
     uuid: Uuid,
     game: ohhell::Ohhell,
