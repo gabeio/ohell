@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 rand = "*"
 cursive = "*"
+uuid = { version = "0.8", features = ["v4"] }
