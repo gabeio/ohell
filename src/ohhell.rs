@@ -30,9 +30,7 @@ impl Ohhell {
         self.deck = deck;
         let ohhell = self.deal();
         self = ohhell;
-        println!("{:?}", deck.get_cards());
-        self.deck = deck;
-
+        self
     }
 
     // maybe change count to i16 later
