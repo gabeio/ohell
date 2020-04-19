@@ -1,8 +1,9 @@
-#[path = "./cards.rs"] mod cards;
-
 use std::collections::HashMap;
 use std::cmp::{PartialEq, Eq};
+
 use uuid::Uuid;
+
+use crate::cards::{Card, Deck, Suit};
 
 #[derive(Debug, Clone)]
 pub struct Ohhell {
@@ -65,7 +66,7 @@ impl Ohhell {
 pub struct Round {
     hands: Vec<Hand>,
     bets: HashMap<Trick, bool>,
-    deck: cards::Deck,
+    deck: Deck,
 }
 
 impl Round {
@@ -73,7 +74,7 @@ impl Round {
         Round{
             hands: vec!(),
             bets: HashMap::new(),
-            deck: cards::Deck::new(vec!()),
+            deck: Deck::new(vec!()),
         }
     }
 
@@ -126,18 +127,18 @@ impl Eq for Trick {}
 #[derive(Debug, Clone)]
 pub struct Hand {
     winner: Option<Player>,
-    pile: cards::Deck,
+    pile: Deck,
 }
 
 impl Hand {
     pub fn new() -> Hand {
         Hand{
             winner: None,
-            pile: cards::Deck::new(vec!()),
+            pile: Deck::new(vec!()),
         }
     }
 
-    pub fn add_card(mut self, card: cards::Card) -> Hand {
+    pub fn add_card(mut self, card: Card) -> Hand {
         self.pile = self.pile.add_card(card);
         self
     }
@@ -152,7 +153,7 @@ impl Hand {
 pub struct Player {
     uuid: Uuid,
     name: String,
-    cards: cards::Deck,
+    cards: Deck,
 }
 
 impl Player {
@@ -160,22 +161,22 @@ impl Player {
         Player{
             uuid: Uuid::new_v4(),
             name: name,
-            cards: cards::Deck::new(vec!()),
+            cards: Deck::new(vec!()),
         }
     }
 
-    pub fn add_card(mut self, card: cards::Card) -> Player {
+    pub fn add_card(mut self, card: Card) -> Player {
         self.cards = self.cards.add_card(card);
         self
     }
 
-    pub fn take_a_card(mut self) -> (cards::Card, Player) {
+    pub fn take_a_card(mut self) -> (Card, Player) {
         let (card, deck) = self.cards.take_a_card();
         self.cards = deck;
         (card, self)
     }
 
-    pub fn take_card(mut self, index: i8, suit: i8) -> (cards::Card, Player) {
+    pub fn take_card(mut self, index: i8, suit: i8) -> (Card, Player) {
         let (card, deck) = self.cards.take_card(index, suit);
         self.cards = deck;
         (card, self)

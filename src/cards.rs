@@ -1,10 +1,8 @@
-extern crate rand;
-
 use std::fmt;
 use rand::thread_rng;
 use rand::seq::SliceRandom;
 
-#[derive(Hash, Debug, Clone, Copy)]
+use crate::ohhell::Player;
 pub struct Card {
     index: i8,
     facevalue: &'static str,
