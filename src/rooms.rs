@@ -16,9 +16,4 @@ impl Room {
             game: Ohhell::new(),
         }
     }
-
-    pub fn start(mut self) -> Room {
-        self.game = self.game.start();
-        self
-    }
 }
