@@ -19,18 +19,12 @@ impl Ohhell {
         }
     }
 
-    pub fn start(self) -> Ohhell {
-        // let deck = cards::Deck::new(vec!());
-        // let deck = deck.create_52();
-        // let deck = deck.shuffle();
-        // self.deck = deck;
-        // let ohhell = self.deal();
-        // self = ohhell;
-        self
+    pub fn add_player(&mut self, player: Player) {
+        self.players.push(player);
     }
 
     // maybe change count to i16 later
-    pub fn set_players(mut self, count: usize) -> Ohhell {
+    pub fn set_players(&mut self, count: usize) -> &Ohhell {
         for i in 0..count {
             let name: String = format!("Player {}", i);
             self.players.push(Player::new(name));
@@ -38,14 +32,31 @@ impl Ohhell {
         self
     }
 
-    pub fn set_rounds(mut self, count: usize) -> Ohhell {
+    pub fn add_round(&mut self, round: Round) {
+        self.rounds.push(round);
+    }
+
+    pub fn set_rounds(&mut self, count: usize) -> &Ohhell {
         for _ in 0..count {
             self.rounds.push(Round::new());
         }
         self
     }
 
-    // fn deal(mut self) -> Ohhell {
+    pub fn set_hands(&mut self, count: usize) -> &Ohhell {
+        for i in 0..count {
+            if let Some(round) = self.rounds.get_mut(i) {
+                for _ in 0..count {
+                    round.add_hands(i);
+                }
+            }
+        }
+        self
+    }
+
+    // TODO: fix deal implementation
+
+    // fn deal(&mut self) -> &Ohhell {
     //     let mut players = self.players;
     //     for _ in 0..self.rounds.len() {
     //         for player in &mut players {
@@ -67,6 +78,7 @@ pub struct Round {
     hands: Vec<Hand>,
     bets: HashMap<Trick, bool>,
     deck: Deck,
+    trump: Option<Suit>,
 }
 
 impl Round {
@@ -75,10 +87,11 @@ impl Round {
             hands: vec!(),
             bets: HashMap::new(),
             deck: Deck::new(vec!()),
+            trump: None,
         }
     }
 
-    pub fn add_hands(mut self, hands: usize) -> Round {
+    pub fn add_hands(&mut self, hands: usize) -> &Round {
         for _ in 0..hands {
             self.hands.push(Hand::new());
         }

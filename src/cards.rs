@@ -3,10 +3,15 @@ use rand::thread_rng;
 use rand::seq::SliceRandom;
 
 use crate::ohhell::Player;
+
+pub type Suit = i8;
+
+#[derive(Hash, Debug, Clone)]
 pub struct Card {
     index: i8,
     facevalue: &'static str,
-    suit: i8,
+    suit: Suit,
+    owner: Option<Player>,
 }
 
 impl Card {
@@ -14,7 +19,8 @@ impl Card {
         Card{
             index: index,
             facevalue: string,
-            suit: suit
+            suit: suit,
+            owner: None,
         }
     }
 
