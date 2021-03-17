@@ -1,0 +1,14 @@
+1. full deck of cards
+2. shuffle deck of cards
+2a. ask for amount of players
+3. ask for amount of hands
+3a. game loop until amount of hands left is zero
+4. deal amount of hands as cards to everyone (assuming there is enough)
+4a. subtract 1 card for every hand already played
+5. ask for tricks
+6. tricks can not add up to amount of cards in the hand
+7. first play rotates
+7a. a card off the deck is flipped to see the trump suit
+8. first player can put down anything
+9. next player must follow *suit* unless they do not have the suit or wish to trump (same for all other players)
+10. point goes to highest trump suit card, then highest suit card

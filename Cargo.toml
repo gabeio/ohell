@@ -1,0 +1,23 @@
+[package]
+name = "ohell"
+version = "0.1.0"
+authors = ["Gabe De Luca <me@gabe.io>"]
+edition = "2018"
+
+[[bin]]
+name = "server"
+path = "src/main.rs"
+
+[dependencies]
+actix = "~0.10"
+actix-broker = "~0.3"
+actix-files = "~0.5"
+actix-rt = "~2"
+actix-web = "~3"
+actix-web-actors = "~3"
+env_logger = "~0.8"
+futures = "~0.3"
+log = "~0.4"
+rand = "~0.8"
+serde = "~1.0"
+rmp-serde = "~0.15"
